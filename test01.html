@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบบันทึกยืมคืนพัสดุ</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        form {
+            max-width: 400px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        label, input, button {
+            display: block;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        input, button {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4caf50;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>ระบบบันทึกยืมคืนพัสดุ</h1>
+
+    <table id="inventoryTable">
+        <thead>
+            <tr>
+                <th>ชื่อพัสดุ</th>
+                <th>ผู้ยืม</th>
+                <th>ช่องทางติดต่อ</th>
+                <th>วันที่ยืม</th>
+                <th>วันที่คืน</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- ข้อมูลจะถูกแทรกที่นี่ -->
+        </tbody>
+    </table>
+
+    <form id="inventoryForm">
+        <label for="itemName">ชื่อพัสดุ:</label>
+        <input type="text" id="itemName" required>
+
+        <label for="borrowerName">ชื่อผู้ยืม:</label>
+        <input type="text" id="borrowerName" required>
+
+        <label for="contactNumber">ช่องทางติดต่อ:</label>
+        <input type="tel" id="contactNumber" required pattern="[0-9]{10}">
+
+        <label for="borrowDate">วันที่ยืม:</label>
+        <input type="date" id="borrowDate" required>
+
+        <button type="button" onclick="recordBorrow()">บันทึกยืม</button>
+
+        <label for="returnDate">วันที่คืน:</label>
+        <input type="date" id="returnDate" required>
+
+        <button type="button" onclick="recordReturn()">บันทึกคืน</button>
+    </form>
+
+    <script>
+        function recordBorrow() {
+            var itemName = document.getElementById('itemName').value;
+            var borrowerName = document.getElementById('borrowerName').value;
+            var contactNumber = document.getElementById('contactNumber').value;
+            var borrowDate = document.getElementById('borrowDate').value;
+
+            // ทำตามคำสั่งบันทึกยืม
+            console.log('บันทึกยืม:', itemName, 'โดย', borrowerName, 'เบอร์', contactNumber, 'เมื่อ', borrowDate);
+
+            // เพิ่มรายการในตาราง
+            addTableRow(itemName, borrowerName, contactNumber, borrowDate, '');
+        }
+
+        function recordReturn() {
+            var itemName = document.getElementById('itemName').value;
+            var returnDate = document.getElementById('returnDate').value;
+
+            // ทำตามคำสั่งบันทึกคืน
+            console.log('บันทึกคืน:', itemName, 'เมื่อ', returnDate);
+
+            // อัปเดตรายการในตาราง
+            updateTableRow(itemName, returnDate);
+        }
+
+        function addTableRow(itemName, borrowerName, contactNumber, borrowDate, returnDate) {
+            var table = document.getElementById('inventoryTable').getElementsByTagName('tbody')[0];
+            var row = table.insertRow(table.rows.length);
+
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+            var cell5 = row.insertCell(4);
+
+            cell1.innerHTML = itemName;
+            cell2.innerHTML = borrowerName;
+            cell3.innerHTML = contactNumber;
+            cell4.innerHTML = borrowDate;
+            cell5.innerHTML = returnDate;
+        }
+
+        function updateTableRow(itemName, returnDate) {
+            var table = document.getElementById('inventoryTable');
+            var rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+            for (var i = 0; i < rows.length; i++) {
+                var cells = rows[i].getElementsByTagName('td');
+                if (cells[0].innerHTML === itemName && cells[4].innerHTML === '') {
+                    cells[4].innerHTML = returnDate;
+                    break;
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>
+
